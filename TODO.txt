@@ -1,0 +1,2 @@
+* Rewrite validEmail() function in people.php, allows things like 'ne' as an email.
+* Write Edit Profile page.
