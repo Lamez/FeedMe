@@ -1,0 +1,59 @@
+<?php
+	$page = new Page("Edit Profile", $person);
+	$page->requireLogin();
+		$page->showHeader();
+?>
+ <div class="grid_12">
+	<div class="widget">
+    	<header>
+        	<div class="icon"><span class="icon" data-icon="ui-text-field-medium"></span></div>
+			<div class="title"><h2>Edit Profile</h2></div>
+        </header>
+        <div class="content">
+        	<form action="<?php echo $page->makeLink("validate", "try", array("dark", "page")); ?>" class="validate" method="post">
+            	<fieldset class="set">
+                	<div class="field">
+                    	<label>Name: </label>
+                    	<div class="entry">
+                    		<div class="dual">
+                        		<input type="text" class="required" name="first_name" value="<?php echo $person->first_name(); ?>" />
+                            	<input type="text" class="required" name="last_name" value="<?php echo $person->last_name(); ?>" />
+                       		</div>  
+               	    	</div>
+        		 	</div>
+                </fieldset>
+                <fieldset class="set">
+                	<div class="field">
+                    	<label>Email: </label>
+                        <div class="entry">
+                        	<input type="text" class="custom[email]" name="email" value="<?php echo $person->email(); ?>" />
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset class="set">
+                	<div class="field">
+                    	<label> </label>
+                    	<div class="entry">
+                        	<input type="password" name="password_A" placeholder="Password" />
+                        </div>
+                   	</div>
+                </fieldset>
+                <fieldset class="set">
+                	<div class="field">
+                    	<label> </label>
+                    	<div class="entry">
+                        	<input type="password" name="password_B" placeholder="Re-type Password" />
+                        </div>
+                   	</div>
+                </fieldset>
+                <footer class="pane">
+                	<input type="submit" value="Submit" class="fullpane-bt" />
+                </footer>
+            </form>
+        </div>
+    </div>
+ </div>
+<?php
+	}
+	$page->showFooter();
+?>
