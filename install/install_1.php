@@ -1,11 +1,14 @@
 <?php
 	$path = "../";
-	include("includes.php");
-	$session->add("install_0", false);
+	include("includes.php"); //contains $session.
 	$page = new Page("Installation Wizard");
-	$page->setPath($path);
+	$page->setPath($path); 
+	$install_0 = $session->get("install_0");
+	if(is_null($install_0) || !$install_0){
+		$page->redirect($page->getURL."install.php");
+		//exit;
+	}
 	$page->showHeader(true);
-	$session->displayAll();
 ?>   
 <div class="grid_12">
 	<div class="widget wizard">
@@ -16,11 +19,11 @@
             </div>
             	<nav class="steps">
                 	<ul>
-                    	<li class="active">
+                    	<li>
                         	<div>1</div>
                         	<span>File Premissions</span>
                         </li>
-                        <li>
+                        <li class="active">
                         	<div>2</div>
                             <span>DB Setup</span>
                         </li>
@@ -50,39 +53,14 @@
 						$color = "009900"; //green. 66ff99.
 					else
 						$color = "ff0000"; //red.
-					$session->change("install_0", $bool);
-					echo $session->displayAll();
+					$session->add("install_0", $bool); 
 				?>
-				<div class="grid_12">
-                    <div class="widget">
-                        <header>
-                            <div class="icon">
-                                <span class="icon" data-icon="table" style="background-image: url(http://localhost/FeedMe/Template/final/examples/images/fugue-icons/icons/table.png);"></span>
-                            </div>
-                            <div class="title"><h2>File Premissions</h2></div>
-                        </header>
-                        <div class="content" style="display: block;">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>File Name</th>
-                                        <th>Writable</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                	<tr>
-                                    	<td><p style="color: #<?php echo $color; ?>"><?php echo $path; ?>constants.php</p></td>
-                                        <td><p style="color: #<?php echo $color; ?>"><?php echo ($bool ? "Yes" : "No") ?></p></td>
-                                	</tr>
-                             	</tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+
                 <p align="center">
+                	<a href="install.php" class="bt blue large"><span class="glyph"></span>< Previous Step</a>
 					<?php
                         if($bool){
-							echo '<a href="install_1.php" class="bt blue large"><span class="glyph"></span>Next Step</a>'; 
+							echo '<a href="install_1.php" class="bt blue large"><span class="glyph"></span>Next Step ></a>'; 
 						}
                     ?>
                 </p>

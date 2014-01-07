@@ -42,8 +42,8 @@
 		public function displayAll(){
 			print_r($_SESSION);
 		}
-		public function toString(){
-			$this->displayAll();
+		public function __toString(){
+			$this->displayAll(); //should throw a warning or an error, because it is returning an array object, not a string..
 		}
 		public function display($name){
 			if(isset($name))

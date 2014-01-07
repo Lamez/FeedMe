@@ -20,6 +20,11 @@
 				$this->crumb_size = 0; //keep up with the size of the array, so we don't have to call count() all the time.
 			}
 		}
+		public function getURL(){
+        	$protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+        	$domainName = $_SERVER['HTTP_HOST'];
+        	return $protocol.$domainName.dirname($_SERVER['PHP_SELF']);
+		}
 		public function setTitle($title){
 			$this->title = $title;
 		}

@@ -14,7 +14,7 @@
 	define("PAGES", "pages/");
 	
 	/*Names */
-	define("APP_NAME", "WebConverter");
+	define("APP_NAME", "FeedMe");
 	define("VERSION", "0.0.1");
 	
 	/* Database Table Information */
@@ -24,6 +24,11 @@
 	define("SALT", "BootyHole1345");
 	
 	/* Database Information */
+	define("INSTALLED", 0);
+	define("DB_HOST", "");
+	define("DB_USER", "");
+	define("DB_PASS", "");
+	define("DB_NAME", "");
 	
 	/* Due to Installation later on down the road nothing should be past this point */
 ?>

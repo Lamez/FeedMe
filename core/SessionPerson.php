@@ -80,7 +80,7 @@
 		}
 		/* Update Functions */
 		/* ---------------- */
-		/* Had to change the names from change to update in this class due to strict standards.
+		/* Had to change the names from "change" to "update" in this class due to strict standards.
 		 * In the people class, the function paramerter list calls for an id, these functions do not, therefor I cannot override them in PHP */
 
 		public function updateFirstName($fname){
