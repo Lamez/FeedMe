@@ -5,7 +5,7 @@
 	$page->setPath($path); 
 	$install_0 = $session->get("install_0");
 	if(is_null($install_0) || !$install_0){
-		$page->redirect($page->getURL."install.php");
+		$page->redirect($page->getURL."install_0.php");
 		//exit;
 	}
 	$page->showHeader(true);
@@ -57,7 +57,7 @@
 				?>
 
                 <p align="center">
-                	<a href="install.php" class="bt blue large"><span class="glyph"></span>< Previous Step</a>
+                	<a href="install_0.php" class="bt blue large"><span class="glyph"></span>< Previous Step</a>
 					<?php
                         if($bool){
 							echo '<a href="install_1.php" class="bt blue large"><span class="glyph"></span>Next Step ></a>'; 

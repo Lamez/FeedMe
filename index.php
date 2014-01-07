@@ -25,7 +25,7 @@
 			include(ERROR_DIR."404.php");
 	}else{
 		$page = new Page("");
-		$page->redirect($page->getURL."install/install.php");
+		$page->redirect($page->getURL."install/install_0.php");
 		//		header("Location: ".$page->currentURL($false)."/install/install.php");
 		//echo "Please Install ".APP_NAME.".";
 	}
