@@ -1,5 +1,6 @@
 <?php
-	//This goes a page that is used by Page.php that is in the includes folder. This page is included..
+	//This file is used by Page.php that is in the includes folder. This page is included..
+	//$this referes to the page object. core/Page.php
 ?>
 <!DOCTYPE html>
 <html>

@@ -6,7 +6,8 @@
 	if($page->queryEqual("validate", 1)){
 		$page->removeQuery("validate");
 		$people->editInfo($_POST["email"], $_POST["first_name"], $_POST["last_name"], $_POST["password_A"], $_POST["password_B"]);
-		if(count($data[1]) == 0){ //No Errors..
+		//reading this from the future, where the hell did (data[]) come from? ...I will fix this later.
+		if(count($data[1]) == 0){ //No Errors.. 
 			$page->addQuery("edit", 1);
 			$session->remove("errors");
 			$session->remove("values");

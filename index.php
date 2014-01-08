@@ -1,7 +1,7 @@
 <?php
 	//index.php: this is the driver that will call the absolutly needed files and the requested file if it exists, if not calls 404.php. 
 	include("includes.php"); //calls the classes each page might need.
-	if(INSTALLED){
+	if(defined(INSTALLED)){
 		$session = new Session();
 		$db = new Database(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 		$person = new SessionPerson($db, $session);

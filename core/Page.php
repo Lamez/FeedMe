@@ -64,6 +64,15 @@
 		public function showBody($html){
 			echo $html;
 		}
+		//<a href="install_1.php" class="bt blue large"><span class="glyph"></span>Next Step ></a>
+		public function newButton($page, $class, $title, $addQuery = false){
+			$return;
+			if(!$addQuery)
+				$return = '<a href="'.$page.'" class="'.$class.'"><span class="glyph"></span>'.$title.'</a>';
+			else
+				$return = '<a href="'.$page.'?'.$this->getQueryString().'" class="'.$class.'"><span class="glyph"></span>'.$title.'</a>';
+			return $return;//heh
+		}
 		public function newAlert($title, $body, $color){
 			  return '<div class="notification '.$color.'">
 					<p><strong>'.$title.'</strong> '.$body.'</p>

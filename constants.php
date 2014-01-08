@@ -1,6 +1,6 @@
 <?php
 	//constants.php: This file is for setting variables that will not change from page to page, but that is used from page to page.
-
+	//some content generated from the installation process
 	/* Files\Pages */
 	define("HEADER", "theme_core/header.php");
 	define("FOOTER", "theme_core/footer.php");
@@ -24,11 +24,8 @@
 	define("SALT", "BootyHole1345");
 	
 	/* Database Information */
-	define("INSTALLED", 0);
-	define("DB_HOST", "");
-	define("DB_USER", "");
-	define("DB_PASS", "");
-	define("DB_NAME", "");
-	
-	/* Due to Installation later on down the road nothing should be past this point */
-?>
+define("DB_HOST", "localhost");
+		define("DB_USER", "root");
+		define("DB_PASS", "");
+		define("DB_NAME", "FeedMe_24405");
+		?>

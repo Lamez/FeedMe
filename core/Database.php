@@ -1,19 +1,19 @@
 <?php
 	//For changes, see: http://www.php.net/manual/en/mysqli.connect.php
 	class Database{
-		var $mysqli, $result, $q, $affectedRows;
+		var $mysqli, $result, $q, $affectedRows, $error;
 		function __construct($host, $user, $pass, $db){
-			if (!function_exists('mysqli_init') && !extension_loaded('mysqli')) {
-				echo 'Error: You MySQLi is not installed.';
-				exit;
+			if(!function_exists('mysqli_init') && !extension_loaded('mysqli')){
+				$this->error = 'Error: MySQLi is not installed.';
+				return false;
 			}else
-				$this->connect($host, $user, $pass, $db);
+				return @$this->connect($host, $user, $pass, $db);
 		}
 		private function connect($host, $user, $pass, $db){
 			$this->mysqli = new MySQLi($host, $user, $pass, $db);
-			if(mysqli_connect_error()){
-				echo 'Error: Cannot connect to the Database.';
-				exit;
+			if(@mysqli_connect_error()){
+				$this->error = 'Error: Cannot connect to the Database.';
+				return false;
 			}
 		}
 		private function clean(){
@@ -73,7 +73,10 @@
 			$this->execute("ALTER TABLE ".$table." AUTO_INCREMENT = ".$inc);
 		}
 		public function error(){
-			return @mysqli_error($this->mysqli). " <strong><font color=\"red\">QUERY</font>: ".$this->q."</strong>";
+			$this->error = @mysqli_error($this->mysqli). " <strong><font color=\"red\">QUERY</font>: ".$this->q."</strong>";
+		}
+		public function displayError(){
+			return $this->error();
 		}
 		private function close(){
 			@mysqli_close($this->mysqli);

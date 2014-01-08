@@ -64,7 +64,7 @@
         	<h2>Create New Person</h2>
         </div>
     </header>
-    <div class="content" >
+    <div class="content">
     	<form action="<?php echo $page->makeLink("validate", "try", array("dark", "page")); ?>" class="validate" method="post">
         	<fieldset class="set">
             	<div class="field">
