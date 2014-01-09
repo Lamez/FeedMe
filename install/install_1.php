@@ -23,8 +23,8 @@
 			if(!mysqli_query($simple_connection, "CREATE DATABASE IF NOT EXISTS ".$name.";")){
 				$page->addQuery("error", 1);
 				$page->removeQuery("setup");
-				$page->redirect();
 				mysqli_close($simple_connection);
+				$page->redirect();
 				exit;
 			}
 			//close connection.

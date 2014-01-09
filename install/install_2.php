@@ -3,8 +3,8 @@
 	include("includes.php");
 	$page = new Page("Installation Wizard");
 	$page->setPath($path);
-	$db = new Database(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-	$person = new Person($db);
+	$db = @new Database(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+	$person = @new Person($db);
 	if($session->get("install_1") != 1){
 		$page->redirect($page->getURL."install_1.php");
 		exit;
@@ -34,13 +34,13 @@
 			exit;
 		}
 	}
-	$page->showHeader(true);	
 	function dispError($name, $error){
 		echo '<label for="'.$name.'" class="error">'.$error.'</label>';
 	}
 	$error_array = NULL;
 	if($page->getQuery("error") == 1)
 		$error_array = $session->get("errors");
+	$page->showHeader(true);	
 ?>   
 <div class="grid_12">
 	<div class="widget wizard">

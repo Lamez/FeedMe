@@ -8,7 +8,7 @@
 		private $crumbs;
 		private $crumb_size;
 		//Person $person is not really needed, the only time it is called is in requireLogin(), so if you require a login to continue, you must pass the person obj.
-		public function __construct($title, Person $person = NULL, $show_crumbs = false, $path = ""){
+		public function __construct($title = "", Person $person = NULL, $show_crumbs = false, $path = ""){
 			$this->setQuery($_SERVER['QUERY_STRING']);
 			$this->setTitle($title);
 			$this->setPath($path);
