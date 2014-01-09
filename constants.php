@@ -21,7 +21,4 @@
 	define("TBL_PEOPLE", "people");
 	
 	/* Salt */
-	define("SALT", "BootyHole1345");
-	
-	/* Database Information */
 ?>

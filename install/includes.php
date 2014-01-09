@@ -3,14 +3,16 @@
 	include($path."includes.php");
 	$session = new Session();
 	function writeToFile($server, $username, $password, $name){
-		$data = 
-		'define("DB_HOST", "'.$server.'");
+		$data = 		
+		'define("SALT", "'.rand().'@'.rand().'");
+		/* Database Information */
+		define("DB_HOST", "'.$server.'");
 		define("DB_USER", "'.$username.'");
 		define("DB_PASS", "'.$password.'");
 		define("DB_NAME", "'.$name.'");
 		?>';
 		$filename = getcwd() . "/../constants.php";
-		$line_i_am_looking_for = 26;
+		$line_i_am_looking_for = 23;
 		$lines = file($filename, FILE_IGNORE_NEW_LINES);
 		$lines[$line_i_am_looking_for] = $data;
 		file_put_contents($filename , implode("\n", $lines));
