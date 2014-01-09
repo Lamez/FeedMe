@@ -4,7 +4,8 @@
 	$session = new Session();
 	function writeToFile($server, $username, $password, $name){
 		$data = 		
-		'define("SALT", "'.rand().'@'.rand().'");
+		'
+		define("SALT", "'.rand().'@'.rand().'");
 		/* Database Information */
 		define("DB_HOST", "'.$server.'");
 		define("DB_USER", "'.$username.'");
