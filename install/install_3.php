@@ -6,9 +6,11 @@
 	if($session->get("install_2") != 1){
 		$page->redirect($page->getURL."install_2.php");
 		exit;
+	}else if(defined("INSTALLED")){
+		$page->redirect("../");
+		exit; //I need to stop adding these..
 	}else if($page->getQuery("login") == 1){
-		if(!defined("INSTALLED"))
-			install(); //see includes.php
+		install(); //see includes.php
 		$session->removeAll(); //starting clean!
 		$page->redirect("../");
 	}
@@ -31,7 +33,7 @@
                     	<div>2</div>
                         <span>DB Setup</span>
                 	</li>
-                    <li class="active">
+                    <li>
                     	<div>3</div>
                         <span>Account Setup</span>
                    	</li>

@@ -70,10 +70,6 @@
                    	</li>
                     <li>
                     	<div>4</div>
-                        <span>Locating Root</span>
-          			</li>
-                    <li>
-                    	<div>5</div>
                         <span>Finished</span>
                   	</li>
                	</ul>

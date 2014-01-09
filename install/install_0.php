@@ -2,6 +2,10 @@
 	$path = "../";
 	include("includes.php");
 	$page = new Page("Installation Wizard");
+	if(defined("INSTALLED")){
+		$page->redirect("../");
+		exit;
+	}
 	$page->setPath($path);
 	$page->showHeader(true);
 ?>   
@@ -28,10 +32,6 @@
                    	</li>
                     <li>
                     	<div>4</div>
-                        <span>Locating Root</span>
-          			</li>
-                    <li>
-                    	<div>5</div>
                         <span>Finished</span>
                   	</li>
                	</ul>
