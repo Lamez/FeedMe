@@ -17,10 +17,10 @@
 	}
 	function install(){
 		$data = 
-		'define("INSTALLED", 1);\n
+		'define("INSTALLED", "true");
 		?>';
 		$filename = getcwd() . "/../constants.php";
-		$line_i_am_looking_for = 31;
+		$line_i_am_looking_for = 30;
 		$lines = file($filename, FILE_IGNORE_NEW_LINES);
 		$lines[$line_i_am_looking_for] = $data;
 		file_put_contents($filename , implode("\n", $lines));

@@ -30,55 +30,68 @@
 		}
 		/* Validation Functions */
 		public function validEmail($email){ 
-    		return filter_var($email, FILTER_VALIDATE_EMAIL); //1 = valid, 0 = invalid.
-		}
-		/*public function validEmail($email){
-			// First, we check that there's one @ symbol, 
-  			// and that the lengths are right.
-  			if(!ereg("^[^@]{1,64}@[^@]{1,255}$", $email)){
-    			// Email invalid because wrong number of characters 
-    			// in one section or wrong number of @ symbols.
-   				return false;
-  			}
-  			// Split it into sections to make life easier
-  			$email_array = explode("@", $email);
-  			$local_array = explode(".", $email_array[0]);
-  			for($i = 0; $i < sizeof($local_array); $i++){
-    			if(!ereg("^(([A-Za-z0-9!#$%&'*+/=?^_`{|}~-][A-Za-z0-9!#$%&↪'*+/=?^_`{|}~\.-]{0,63})|(\"[^(\\|\")]{0,62}\"))$",$local_array[$i])){
-      				return false;
-    			}
-  			}
-  			// Check if domain is IP. If not, 
-  			// it should be valid domain name
-  			if(!ereg("^\[?[0-9\.]+\]?$", $email_array[1])){
-    			$domain_array = explode(".", $email_array[1]);
-				if(sizeof($domain_array) < 2){
+    		if(filter_var($email, FILTER_VALIDATE_EMAIL)){
+				$domain = @array_pop(explode('@', $email));
+				return checkdnsrr($domain, 'MX');
+			}else
+				return false;
+		
+				//1 = valid, 0 = invalid.
+			/*
+			// First, we check that there's one @ symbol, and that the lengths are right
+        	if (!preg_match("/^[^@]{1,64}@[^@]{1,255}$/", $email)) {
+            	// Email invalid because wrong number of characters in one section, or wrong number of @ symbols.
+           	 	return false;
+        	}
+        	// Split it into sections to make life easier
+			$email_array = explode("@", $email);
+			$local_array = explode(".", $email_array[0]);
+			for ($i = 0; $i < sizeof($local_array); $i++) {
+				if (!preg_match("/^(([A-Za-z0-9!#$%&'*+\/=?^_`{|}~-][A-Za-z0-9!#$%&'*+\/=?^_`{|}~\.-]{0,63})|(\"[^(\\|\")]{0,62}\"))$/", $local_array[$i])) {
+					return false;
+				}
+			}
+			if (!preg_match("/^\[?[0-9\.]+\]?$/", $email_array[1])) { // Check if domain is IP. If not, it should be valid domain name
+				$domain_array = explode(".", $email_array[1]);
+				if (sizeof($domain_array) < 2) {
 					return false; // Not enough parts to domain
 				}
-				for($i = 0; $i < sizeof($domain_array); $i++){
-					if(!ereg("^(([A-Za-z0-9][A-Za-z0-9-]{0,61}[A-Za-z0-9])|↪([A-Za-z0-9]+))$",$domain_array[$i])){
+				for ($i = 0; $i < sizeof($domain_array); $i++) {
+					if (!preg_match("/^(([A-Za-z0-9][A-Za-z0-9-]{0,61}[A-Za-z0-9])|([A-Za-z0-9]+))$/", $domain_array[$i])) {
 						return false;
 					}
 				}
-  			}
-  			return true;
-		}*/
+			}
+			return true;*/
+		}
+		/*
 		public function validName($name){
 			if(!empty($name)){
 				for($i=0; $i<strlen($name); $i++){
 					if(is_numeric($name[$i]))
 						return false; //please don't hate me for this :(
+					if($name[$i] == " ")
+						return false;	
 				}
 				return true;
 			}else
 				return false;
+		}*/
+		public function validName($name){
+			return preg_match("^[a-zA-Z]+(([\'\,\.\-][a-zA-Z])?[a-zA-Z]*)*$^", $name);
 		}
-		public function validPassword($password){ //Makes sure the password is not blank and its size is greater than 4 and less than 100
+		/*public function validPassword($password){ //Makes sure the password is not blank and its size is greater than 4 and less than 100
 			if(!empty($password)){
 				$l = strlen($password);
 				return $l > 4 && $l < 100;
 			}else
 				return false;
+		}*/
+		/*
+			Password matching expression. Password must be at least 8 characters, no more than 8 characters, and must include at least one upper case letter, one lower case letter, and one numeric digit.
+		*/
+		public function validPassword($password){
+			return preg_match("^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,100}$^", $password);
 		}
 		public function emailExists($email){//This email checks if an email is already in the db.
 			$this->db->execute("SELECT id FROM ".TBL_PEOPLE." WHERE email = '".strtolower($email)."'");
@@ -133,28 +146,33 @@
 			$values = array();
 			//Email Checking..
 			$values["email"] = strtolower($email);
-
-			if($this->validEmail($email))
-				if($this->emailExists($email))
+			if($this->validEmail($email)){
+				if($this->emailExists($email)){
 					$errors["email"] = "Email is already in use."; //Email is already in the database.
-			else
+				}
+			}else{
 				$errors["email"] = "Email is invalid."; //Email is not vaild.
+			}				
 			//First Name Checking..
 			$values["first_name"] = strtolower($first_name);
-			if(!$this->validName($first_name))
+			if(!$this->validName($first_name)){
 				$errors["first_name"] = "First Name is not a valid name.";
+			}
 			//Last Name Checking..
 			$values["last_name"] = strtolower($last_name);
-			if(!$this->validName($last_name))
+			if(!$this->validName($last_name)){
 				$errors["last_name"] = "Last Name is not a valid name.";
+			}
 			//Password Checking..
-			if($password_A === $password_B)
-				if($this->validPassword($password_A)) //Same password, so we only need to check one.
+			if($password_A === $password_B){
+				if($this->validPassword($password_A)){ //Same password, so we only need to check one.
 					$values["password"] = $this->makePassword($password_A);
-				else
-					$errors["password"] = "Password is not a valid password.";				
-			else
+				}else{
+					$errors["password"] = "Password between 8 and 100 characters; must contain at least one lowercase letter, one uppercase letter, one numeric digit.";		
+				}
+			}else{
 				$errors["password"] = "Passwords did not match.";
+			}
 			if(count($errors) == 0)
 				$this->addPerson($values["email"], $values["first_name"], $values["last_name"], $values["password"]);
 			return array($values, $errors);		

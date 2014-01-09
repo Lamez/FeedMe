@@ -14,6 +14,7 @@
 			password VARCHAR(100)
 		);");
 		$session->add("install_1", 1);
+		$db->close();
 		header("Location: install_2.php");
 	}else{
 		header("Location: install_1.php");

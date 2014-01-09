@@ -48,7 +48,7 @@
 						$color = "009900"; //green. 66ff99.
 					else
 						$color = "ff0000"; //red.
-					$session->change("install_0", $bool);
+					$session->add("install_0", $bool);
 				?>
         	<table class="table">
             	<thead>

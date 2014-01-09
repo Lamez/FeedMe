@@ -17,10 +17,17 @@
 		$session->add("uname", $_POST["uname"]);
 		$session->add("name", $_POST["name"]);
 		$simple_connection = mysqli_connect($_POST["server"], $_POST["uname"], $_POST["passw"]);
+		echo mysqli_ping($simple_connection);
 		if($simple_connection){ //connected..
 			//create table.
 			$name = str_replace(' ', '_', $_POST["name"]); //no spaces in table name, so.. _UNDERSCORES_!
-			mysqli_query($simple_connection, "CREATE DATABASE IF NOT EXISTS ".$name.";");
+			if(!mysqli_query($simple_connection, "CREATE DATABASE IF NOT EXISTS ".$name.";")){
+				$page->addQuery("error", 1);
+				$page->removeQuery("setup");
+				$page->redirect();
+				mysqli_close($simple_connection);
+				exit;
+			}
 			//close connection.
 			mysqli_close($simple_connection);
 			//store information and move to next step..
@@ -75,7 +82,7 @@
         <div class="content">
         	<?php
 				if($page->getQuery("error") == 1){
-					echo $page->newAlert("Error", "Could not connect to the database. Check your creditals and try again.", "red");
+					echo $page->newAlert("Error", "Could not connect to the database. Check your creditals and try again. Database names cannot have special characters or start with numbers.", "red");
 				}
 			?>
         	<p style="padding: 5px;"><?php echo APP_NAME." ".VERSION; ?>'s uses a database to store infomartion.</p>

@@ -2,15 +2,24 @@
 	//For changes, see: http://www.php.net/manual/en/mysqli.connect.php
 	class Database{
 		var $mysqli, $result, $q, $affectedRows, $error;
-		function __construct($host, $user, $pass, $db){
+		private $host, $user, $pass, $db;
+		function __construct($host, $user, $pass, $db, $autoConnect = true){
+			$this->host = $host;
+			$this->user = $user;
+			$this->pass = $pass;
+			$this->db = $db;
 			if(!function_exists('mysqli_init') && !extension_loaded('mysqli')){
 				$this->error = 'Error: MySQLi is not installed.';
 				return false;
-			}else
-				return @$this->connect($host, $user, $pass, $db);
+			}else{
+				if($autoConnect)
+					return @$this->connect();
+				else
+					return false;
+			}
 		}
-		private function connect($host, $user, $pass, $db){
-			$this->mysqli = new MySQLi($host, $user, $pass, $db);
+		public function connect(){
+			$this->mysqli = new MySQLi($this->host, $this->user, $this->pass, $this->db);
 			if(@mysqli_connect_error()){
 				$this->error = 'Error: Cannot connect to the Database.';
 				return false;
@@ -78,7 +87,7 @@
 		public function displayError(){
 			return $this->error();
 		}
-		private function close(){
+		public function close(){
 			@mysqli_close($this->mysqli);
 		}
 		/*function __destruct(){

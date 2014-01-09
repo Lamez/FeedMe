@@ -7,10 +7,13 @@
 		private $last_name;
 		private $id;
 		private $auth;
-		public function __construct($db){
+		public function __construct(Database $db = NULL){
 			$this->db = $db;
 			parent::__construct($db);
 			$this->removeAllValues();
+		}
+		public function changeDB($db){
+			$this->db = $db;
 		}
 		public function login($email, $password){//Returns TRUE if valid login creditals, false otherwise.
 			$return = false;
@@ -47,6 +50,12 @@
 		}
 		public function isAuth(){
 			return $this->auth;
+		}
+		public function makePassword($password){
+			return parent::makePassword($password);
+		}
+		public function register($email, $first_name, $last_name, $password_A, $password_B){
+			return parent::register($email, $first_name, $last_name, $password_A, $password_B);
 		}
 		//This function inserts the parameters into the database under the table people, the fields should be valid before passing..
 		/* Update Functions */
