@@ -19,6 +19,7 @@
 <div class="grid_12">
 	<div class="widget wizard">
     	<header>
+        	<div class="logo"><br  /><img src="<?php echo $page->getThemePath(); ?>images/logo-small.png" alt="Logo" /></div>
         	<div class="title">
             	<h2><?php echo $page->getTitle(); ?></h2>
                 <span>Step 4: Finished!</span>
