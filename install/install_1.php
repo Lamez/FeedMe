@@ -17,7 +17,6 @@
 		$session->add("uname", $_POST["uname"]);
 		$session->add("name", $_POST["name"]);
 		$simple_connection = mysqli_connect($_POST["server"], $_POST["uname"], $_POST["passw"]);
-		echo mysqli_ping($simple_connection);
 		if($simple_connection){ //connected..
 			//create table.
 			$name = str_replace(' ', '_', $_POST["name"]); //no spaces in table name, so.. _UNDERSCORES_!
