@@ -5,15 +5,14 @@
 	$people = new People($db); 
 	if($page->queryEqual("validate", 1)){
 		$page->removeQuery("validate");
-		$people->editInfo($_POST["email"], $_POST["first_name"], $_POST["last_name"], $_POST["password_A"], $_POST["password_B"]);
-		//reading this from the future, where the hell did (data[]) come from? ...I will fix this later.
+		$data = $people->editInfo($id, $session->get("current_values"), $_POST["email"], $_POST["first_name"], $_POST["last_name"], $_POST["password_A"], $_POST["password_B"]);
 		if(count($data[1]) == 0){ //No Errors.. 
 			$page->addQuery("edit", 1);
-			$session->remove("errors");
-			$session->remove("values");
+			$session->remove("errors_ep");
+			$session->remove("values_ep");
 		}else{
-			$session->add("errors", $data[1]);
-			$session->add("values", $data[0]);
+			$session->add("errors_ep", $data[1]);
+			$session->add("values_ep", $data[0]);
 		}
 		$page->redirect();
 	}else if(!is_null($id) && $id != $person->id() && is_null($session->get("values"))){
@@ -22,8 +21,9 @@
 		$first_name = $data[0]["first_name"];
 		$last_name = $data[0]["last_name"];
 		$email = $data[0]["email"];
-	}else if(!is_null($session->get("values"))){
-		$values = $session->get("values");
+		$session->add("current_values", $data[0]);
+	}else if(!is_null($session->get("values_ep"))){
+		$values = $session->get("values_ep");
 		$first_name = $values["first_name"];
 		$last_name = $values["last_name"];
 		$email = $values["email"];
@@ -32,6 +32,11 @@
 		$last_name = $person->last_name();
 		$email = $person->email();
 	}
+	function dispError($name, $list){
+		if(!empty($list[$name]))
+			echo '<label for="'.$name.'" class="error">'.$list[$name].'</label>';
+	}
+	$errors = $session->get("errors_ep");
 	$page->showHeader();
 ?>
  <div class="grid_12">
@@ -49,6 +54,11 @@
                     		<div class="dual">
                         		<input type="text" class="required" name="first_name" value="<?php echo $first_name; ?>" />
                             	<input type="text" class="required" name="last_name" value="<?php echo $last_name; ?>" />
+                                <?php
+									dispError("first_name", $errors);
+									echo "<br \>";
+									dispError("last_name", $errors);
+								?>
                        		</div>  
                	    	</div>
         		 	</div>
