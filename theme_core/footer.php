@@ -1,4 +1,22 @@
-        <?php if(!$simpleFooter){ ?>
+        <?php 
+		if($this->messageArraySize > 0){ 
+		?>
+		<script>
+        	jQuery(function(){ //for the notifications
+            	$(document).ready(function(){
+                	$.feedback({minToStack: 3}).addMessage({
+                    	title: $('#messageTitle').val(),
+                        message: $('#message').val(),
+                        color: $('#color').val()
+            		});
+            	});
+             	<?php $this->printMessages(); ?>
+ 	       });
+    	</script>
+        <?php 
+		} 
+		if(!$simpleFooter){ 
+		?>
 		<script>
         $(document).ready(function () {
             var s1 = [[2002, 112000], [2003, 122000], [2004, 104000], [2005, 99000], [2006, 121000],

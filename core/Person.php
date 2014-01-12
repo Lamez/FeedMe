@@ -57,6 +57,9 @@
 		public function register($email, $first_name, $last_name, $password_A, $password_B){
 			return parent::register($email, $first_name, $last_name, $password_A, $password_B);
 		}
+		public function editInfo($id, $current_values, $email, $first_name, $last_name, $password_A, $password_B){
+			return parent::editInfo($id, $current_values, $email, $first_name, $last_name, $password_A, $password_B);
+		}
 		//This function inserts the parameters into the database under the table people, the fields should be valid before passing..
 		/* Update Functions */
 		//These functions return true or false if they updated the DB

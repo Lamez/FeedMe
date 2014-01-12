@@ -1,7 +1,6 @@
 <?php
 	//include("../Page.php");
 	$page = new Page("404 Page Not Found");
-	$page->setPath("../../");
 	$page->showHeader(true);
 ?>
 <div id="error-page">

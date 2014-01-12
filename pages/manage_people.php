@@ -6,10 +6,13 @@
 		$page->removeQuery("delete");
 		if(!empty($_POST['delete'])){
 			//might want to ask if they want to delete these people :3
+			$i = 0;
 			foreach($_POST['delete'] as $id){
 				$db->delete(TBL_PEOPLE, "id = '".$id."'");
+				$i++;
 			}
 			$page->addQuery("updatePeople", 1);
+			$page->addQuery("removed", $i);
 		}
 		$page->redirect();
 	}else if($page->queryEqual("addPerson", 1)){
@@ -25,6 +28,13 @@
 		}
 		$page->redirect();
 	}else{
+		if($page->queryEqual("personAdded", 1)){
+			$page->newNotice("Person Added", "A new account has been made.", "green");
+		}
+		if($page->queryEqual("updatePeople", 1)){
+			$removed = $page->getQuery("removed");
+			$page->newNotice("People Removed", "You removed ".$removed." people.", "red");
+		}
 		$page->showHeader();
 		$all_people = $people->fetchAllPeople(); //Find all the peeps in the DB.
 		$num_of_people = count($all_people);

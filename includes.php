@@ -8,6 +8,7 @@
 	include($path."core/Session.php");
 	include($path."core/SessionPerson.php");
 	include($path."core/Database.php");
+	include($path."core/Website.php");
 
 	
 	//include("core/Auth.php");

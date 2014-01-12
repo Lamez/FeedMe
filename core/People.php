@@ -120,12 +120,7 @@
 		}
 		//This function (below) checks for valid inputs, if not adds the error to an array, or if so, adds to a value array
 		//If there are no errors, then add the data to the database and returns the value array and error array in an array..
-		public function register($email, $first_name, $last_name, $password_A, $password_B){
-			/*Removing Previous Errors*/
-			if(isset($errors))
-				unset($errors);
-			/*                       */
-			
+		public function register($email, $first_name, $last_name, $password_A, $password_B){			
 			$errors = array();
 			$values = array();
 			//Email Checking..
@@ -161,17 +156,14 @@
 				$this->addPerson($values["email"], $values["first_name"], $values["last_name"], $values["password"]);
 			return array($values, $errors);		
 		}
-		public function editInfo($id, $current_values, $email, $first_name, $last_name, $password_A, $password_B){
-			/*Removing Previous Errors*/
-			if(isset($errors))
-				unset($errors);
-			/*                       */
-			
+		
+		//edit info function
+		public function editInfo($id, $current_values, $email, $first_name, $last_name, $password_A, $password_B){	
 			$errors = array();
 			$values = array();
 			//Email Checking..
-			$email = $values["email"] = strtolower($email);
-			if(!empty($email) || $current_values != $email){ //email is be considered is inputed. not empty or not the same.
+			$values["email"] = $email;
+			if(!empty($email) || $current_values["email"] != $email){ //email is be considered is inputed. not empty or not the same.
 				if($this->validEmail($email)){
 					if($this->emailExists($email)){
 						$errors["email"] = "Email is already in use."; //Email is already in the database.
@@ -183,17 +175,16 @@
 				}
 			}
 			//First Name Checking..
-			$first_name = $values["first_name"] = strtolower($first_name);
+			$values["first_name"] = $first_name;
 			if(!empty($first_name) || $first_name != $current_values["first_name"]){
 				if(!$this->validName($first_name)){
 					$errors["first_name"] = "First Name is not a valid name.";
 				}else{
 					$this->changeFirstName($id, $first_name);
-					$errors["first_name"] = "updated";
 				}
 			}
 			//Last Name Checking..
-			$last_name = $values["last_name"] = strtolower($last_name);
+			$values["last_name"] = $last_name;
 			if(!empty($last_name) || $last_name != $current_values["last_name"]){
 				if(!$this->validName($last_name)){
 					$errors["last_name"] = "Last Name is not a valid name.";
@@ -205,21 +196,17 @@
 			if(!empty($password_A)){
 				if($password_A === $password_B){
 					if($this->validPassword($password_A)){ //Same password, so we only need to check one.
-						$values["password"] = $this->makePassword($password_A);
-						$this->changePassword($id, $password);
+						$values["password"] = $password_A;
+						$this->changePassword($id, $values["password"]);
 					}else{
 						$errors["password"] = "Password between 8 and 100 characters; must contain at least one lowercase letter, one uppercase letter, one numeric digit..";
 					}
 				}else{
 					$errors["password"] = "Passwords did not match.";
 				}
-			}
-						
-			//
-			if(count($errors) == 0){
-			
-			}
+			}			
 			return array($values, $errors);	
 		}
-	}
+		
+	}//end of class
 ?>

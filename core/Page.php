@@ -7,6 +7,8 @@
 		private $show_crumbs;
 		private $crumbs;
 		private $crumb_size;
+		private $messageArray;
+		private $messageArraySize;
 		//Person $person is not really needed, the only time it is called is in requireLogin(), so if you require a login to continue, you must pass the person obj.
 		public function __construct($title = "", Person $person = NULL, $show_crumbs = false, $path = ""){
 			$this->setQuery($_SERVER['QUERY_STRING']);
@@ -14,6 +16,8 @@
 			$this->setPath($path);
 			$this->setCrumbs($show_crumbs);
 			$this->person = $person;
+			$this->messageArray = array();
+			$this->messageArraySize = 0;
 			if($this->show_crumbs){ //No need to allocate memory if we are not going to show the curmbs, right?, RIGHT?
 				$this->crumbs = array();
 				$this->random();
@@ -87,6 +91,25 @@
 				</div>
 			</div>
 			';
+		}
+		public function newNotice($title, $message, $color){
+			$msg = array();
+			$msg["title"] = $title;
+			$msg["message"] = $message;
+			$msg["color"] = $color;
+			$this->messageArray[$this->messageArraySize] = $msg;
+			$this->messageArraySize++;			
+		}
+		private function printMessages(){ //see header.php
+			foreach($this->messageArray as $msg){
+				echo "
+					$.feedback().addMessage({
+                    	title: '".$msg["title"]."',
+                        message: '".$msg["message"]."',
+                        color: '".$msg["color"]."'
+             		});
+				";
+			}
 		}
 		public function newMenuItem($title, $page, $icon, $external = false){
 			$li = "";

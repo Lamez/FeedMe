@@ -13,6 +13,12 @@
 			last_name VARCHAR(30),
 			password VARCHAR(100)
 		);");
+		$db->execute("CREATE TABLE IF NOT EXISTS websites(
+			id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+			name VARCHAR(30),
+			address VARCHAR(50),
+			folder VARCHAR(50)
+		);");
 		$session->add("install_1", 1);
 		$db->close();
 		header("Location: install_2.php");

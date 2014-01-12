@@ -2,41 +2,49 @@
 	$page = new Page("Edit Profile", $person);
 	$page->requireLogin();
 	$id = $page->getQuery("id");
-	$people = new People($db); 
+	if(empty($id)){
+		$id = $person->id(); //default value.
+	} 
 	if($page->queryEqual("validate", 1)){
 		$page->removeQuery("validate");
-		$data = $people->editInfo($id, $session->get("current_values"), $_POST["email"], $_POST["first_name"], $_POST["last_name"], $_POST["password_A"], $_POST["password_B"]);
+		$data = $person->editInfo($id, $session->get("current_values"), $_POST["email"], $_POST["first_name"], $_POST["last_name"], $_POST["password_A"], $_POST["password_B"]);
 		if(count($data[1]) == 0){ //No Errors.. 
 			$page->addQuery("edit", 1);
 			$session->remove("errors_ep");
 			$session->remove("values_ep");
+			
 		}else{
 			$session->add("errors_ep", $data[1]);
-			$session->add("values_ep", $data[0]);
+			$session->add("values_ep", $_POST);
 		}
 		$page->redirect();
-	}else if(!is_null($id) && $id != $person->id() && is_null($session->get("values"))){
-		$id = $page->getQuery("id");
-		$data = $people->listInfoFromId($id);
-		$first_name = $data[0]["first_name"];
-		$last_name = $data[0]["last_name"];
-		$email = $data[0]["email"];
-		$session->add("current_values", $data[0]);
-	}else if(!is_null($session->get("values_ep"))){
+	}else if(!is_null($session->get("values_ep"))){ //values have been set from form submit
 		$values = $session->get("values_ep");
 		$first_name = $values["first_name"];
 		$last_name = $values["last_name"];
 		$email = $values["email"];
-	}else{
+	}else if(is_null($session->get("values_ep")) && $id != $person->id()){ //no need to pull from the DB if we have it in the session.
+		$data = $person->listInfoFromId($id);
+		$first_name = $data[0]["first_name"];
+		$last_name = $data[0]["last_name"];
+		$email = $data[0]["email"];
+	}else{ //no values (default)
 		$first_name = $person->first_name();
 		$last_name = $person->last_name();
 		$email = $person->email();
 	}
+	$current_values["email"] = $email;
+	$current_values["first_name"] = $first_name;
+	$current_values["last_name"] = $last_name;
+	$session->add("current_values", $current_values);
 	function dispError($name, $list){
 		if(!empty($list[$name]))
-			echo '<label for="'.$name.'" class="error">'.$list[$name].'</label>';
+			echo '<div class="error-container"><label for="'.$name.'" class="error">'.$list[$name].'</label></div>';
 	}
 	$errors = $session->get("errors_ep");
+	if($page->queryEqual("edit", 1)){
+		$page->newNotice("Profile Update!", "The user information has been update!", "green");
+	}
 	$page->showHeader();
 ?>
  <div class="grid_12">
@@ -46,7 +54,7 @@
 			<div class="title"><h2><?php echo $page->getTitle(); ?></h2></div>
         </header>
         <div class="content">
-        	<form action="<?php echo $page->makeLink("validate", 1, array("dark", "page")); ?>" class="validate" method="post">
+        	<form action="<?php echo $page->makeLink("validate", 1, array("dark", "page", "id")); ?>" class="validate" method="post">
             	<fieldset class="set">
                 	<div class="field">
                     	<label>Name: </label>
@@ -56,7 +64,6 @@
                             	<input type="text" class="required" name="last_name" value="<?php echo $last_name; ?>" />
                                 <?php
 									dispError("first_name", $errors);
-									echo "<br \>";
 									dispError("last_name", $errors);
 								?>
                        		</div>  
@@ -68,6 +75,9 @@
                     	<label>Email: </label>
                         <div class="entry">
                         	<input type="text" class="custom[email]" name="email" value="<?php echo $email; ?>" />
+                            <?php
+								dispError("email", $errors);
+							?>
                         </div>
                     </div>
                 </fieldset>
@@ -76,6 +86,9 @@
                     	<label> </label>
                     	<div class="entry">
                         	<input type="password" name="password_A" placeholder="Password" />
+                            <?php
+								dispError("password", $errors);
+							?>							
                         </div>
                    	</div>
                 </fieldset>

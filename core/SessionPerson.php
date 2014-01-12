@@ -107,6 +107,59 @@
 		public function updatePassword($password){
 			return parent::changePassword($this->id(), $password);
 		}
+		//edit info function
+		public function editInfo($id, $current_values, $email, $first_name, $last_name, $password_A, $password_B){			
+			$errors = array();
+			$values = array();
+			//Email Checking..
+			$values["email"] = $email;
+			if(!empty($email) && $current_values["email"] != $email){ //email is be considered is inputed. not empty or not the same.
+				if(parent::validEmail($email)){
+					if(parent::emailExists($email)){
+						$errors["email"] = "Email is already in use."; //Email is already in the database.
+					}else{
+						parent::changeEmail($id, $email); //email is good and valid.
+						$this->updateEmail($email);
+					}
+				}else{
+					$errors["email"] = "Email is invalid."; //Email is not vaild.
+				}
+			}
+			//First Name Checking..
+			$values["first_name"] = $first_name;
+			if(!empty($first_name) && $first_name != $current_values["first_name"]){
+				if(!parent::validName($first_name)){
+					$errors["first_name"] = "First Name is not a valid name.";
+				}else{
+					parent::changeFirstName($id, $first_name);
+					$this->updateFirstName($first_name);
+				}
+			}
+			//Last Name Checking..
+			$values["last_name"] = $last_name;
+			if(!empty($last_name) && $last_name != $current_values["last_name"]){
+				if(!parent::validName($last_name)){
+					$errors["last_name"] = "Last Name is not a valid name.";
+				}else{
+					parent::changeLastName($id, $last_name);
+					$this->updateLastName($last_name);
+				}
+			}
+			//Password Checking..
+			if(!empty($password_A)){
+				if($password_A === $password_B){
+					if(parent::validPassword($password_A)){ //Same password, so we only need to check one.
+						$values["password"]= $password_A;
+						parent::changePassword($id, $values["password"]);
+					}else{
+						$errors["password"] = "Password between 8 and 100 characters; must contain at least one lowercase letter, one uppercase letter, one numeric digit..";
+					}
+				}else{
+					$errors["password"] = "Passwords did not match.";
+				}
+			}			
+			return array($values, $errors);	
+		}
 		
 		/* Session Functions, only used in this class.. */
 		private function getVariable($name){

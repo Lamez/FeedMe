@@ -66,11 +66,13 @@
         <script src="<?php echo $this->getThemePath(); ?>plugins/jqPlot/plugins/jqplot.highlighter.min.js"></script>
         <script src="<?php echo $this->getThemePath(); ?>plugins/jqPlot/plugins/jqplot.barRenderer.min.js"></script>
         <script src="<?php echo $this->getThemePath(); ?>plugins/jqPlot/plugins/jqplot.pointLabels.min.js"></script>
-        <script type="text/javascript">createError("a");</script>
+
+
         <!-- /chart -->
         <link rel="shortcut icon" href="<?php echo $this->getThemePath(); ?>images/favicon.png">
     </head>
-    <body>
+
+<body>
             <div id="wrapper" class="container_12">
 
            
@@ -90,7 +92,7 @@
                     <div>
                         <h1><?php echo $this->person; ?></h1>
                         <center><ul>
-                            <li><a href="<?php echo $this->makeLink("page", "edit_profile"); ?>" title="Edit profile">Edit Profile</a></li>
+                            <li><a href="<?php echo $this->makeLink("page", "edit_person"); ?>" title="Edit profile">Edit Profile</a></li>
                             <li><a href="<?php echo $this->makeLink("page", "logout"); ?>" title="Logout">Logout</a></li>
                         </ul>
                     </div>
@@ -102,9 +104,10 @@
                     	<ul>
 							<?php 
                                 echo $this->newMenuItem("Home", "home", "cloud");
+								echo $this->newMenuItem("My Websites", "my_websites", "computer");
 								//echo $this->newMenuItem("Template Home", "http://themeforest.net/item/esplendido-premium-admin-template/2245222?sso?WT.ac=search_item&WT.seg_1=search_item&WT.z_author=lucaswxp", "cloud", true);
                             	echo $this->newSubMenu("People Managment", 
-								array("My Profile", "Manage People"), 
+								array("My Profile", "Manage People",), 
 								array("edit_person", "manage_people"), 
 								"user");
 							?>
@@ -115,7 +118,6 @@
             </aside>
             <!-- /Sidebar -->                
                 <!-- Content section -->
-            
             
             <!-- # Main section -->
             <section id="main">
