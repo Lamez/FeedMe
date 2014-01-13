@@ -35,21 +35,23 @@
 		}
 		public function sendEmail(){
 			require("pear/Mail.php");
-			$mail = new Mail();
+			$_mail = new Mail();
+			$pear = new Pear();
 			$from = $this->from["name"]." <".$this->from["email"].">";
 			$to = $this->to["name"]." <".$this->to["email"].">";
 			$headers = array (	'From' => $from,
 								'To' => $to,
 								'Reply-To' => $from,
 								'Subject' => $this->email["subject"]);	  
-			$smtp = $mail->factory('smtp',
+			$smtp = $_mail->factory('smtp',
 			array (	'host' => $this->settings["protocol"]."://".$this->settings["server"],
 					'port' => $this->settings["port"],
-					'auth' => $this->settings["auth"],
+					'auth' => $this->settings["auth_required"],
 					'username' => $this->settings["username"],
 					'password' => $this->settings["password"]));
 			$mail = $smtp->send($to, $headers, $this->email["body"]);
-			if(PEAR::isError($mail)){
+			
+			if($pear->isError($mail)){
 				$this->error = $mail->getMessage();
 				$this->sent = false;
 			}else

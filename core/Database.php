@@ -85,7 +85,7 @@
 			$this->error = @mysqli_error($this->mysqli). " <strong><font color=\"red\">QUERY</font>: ".$this->q."</strong>";
 		}
 		public function displayError(){
-			return $this->error();
+			echo $this->error();
 		}
 		public function close(){
 			@mysqli_close($this->mysqli);
