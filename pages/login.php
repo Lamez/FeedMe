@@ -48,7 +48,6 @@
             </nav>        
             <section class="content">
                 <?php 
-					echo $page->newAlert("", "Attempts: ".$session->get("login-page-trys"), "blue");
                     if($page->queryEqual("error", "1"))
                         echo $page->newAlert("", "Invalid Email, Password combination", "red");				
                 ?>

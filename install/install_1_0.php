@@ -19,6 +19,17 @@
 			address VARCHAR(50),
 			folder VARCHAR(50)
 		);");
+		$db->execute("CREATE TABLE IF NOT EXISTS smtp(
+			id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+			email VARCHAR(50),
+			username VARCHAR(50),
+			password VARCHAR(100),
+			auth INT(1),
+			protocol VARCHAR(4),
+			port INT(5),
+			server VARCHAR(50),
+			main INT(1)
+		);");
 		$session->add("install_1", 1);
 		$db->close();
 		header("Location: install_2.php");

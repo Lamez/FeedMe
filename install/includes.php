@@ -2,10 +2,10 @@
 	//installation includes.
 	include($path."includes.php");
 	$session = new Session();
-	$added = 0;
+	$added = 3;
 	function writeToFile($server, $username, $password, $name){
 		$data = 		
-		'
+		'//generated..
 		define("SALT", "##'.rand().'@'.rand().'##'.rand().rand().'");
 		/* Database Information */
 		define("DB_HOST", "'.$server.'");
@@ -14,7 +14,7 @@
 		define("DB_NAME", "'.$name.'");
 		?>';
 		$filename = getcwd() . "/../constants.php";
-		$line_i_am_looking_for = 23 + $added;
+		$line_i_am_looking_for = 23;
 		$lines = file($filename, FILE_IGNORE_NEW_LINES);
 		$lines[$line_i_am_looking_for] = $data;
 		file_put_contents($filename , implode("\n", $lines));
@@ -24,7 +24,7 @@
 		'define("INSTALLED", "true");
 		?>';
 		$filename = getcwd() . "/../constants.php";
-		$line_i_am_looking_for = 30 + $added;
+		$line_i_am_looking_for = 30;
 		$lines = file($filename, FILE_IGNORE_NEW_LINES);
 		$lines[$line_i_am_looking_for] = $data;
 		file_put_contents($filename , implode("\n", $lines));

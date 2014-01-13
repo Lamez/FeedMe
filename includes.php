@@ -9,7 +9,7 @@
 	include($path."core/SessionPerson.php");
 	include($path."core/Database.php");
 	include($path."core/Website.php");
-
+	include($path."core/SMTP.php");
 	
 	//include("core/Auth.php");
 	//include("core/File.php");
