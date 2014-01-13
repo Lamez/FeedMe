@@ -49,7 +49,9 @@
             <section class="content">
                 <?php 
                     if($page->queryEqual("error", "1"))
-                        echo $page->newAlert("", "Invalid Email, Password combination", "red");				
+                        echo $page->newAlert("", "Invalid Email, Password combination", "red");	
+					else if($page->queryEqual("pw_reset", 1))
+						echo $page->newAlert("", "Your password has been reset.", "green");
                 ?>
                 <!-- class="validate-engine" -->
                 <form action="<?php echo $page->makeLink("validate", "try", array("page", "ref", "error", "dark")); ?>"  method="post">
