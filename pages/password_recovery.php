@@ -101,7 +101,8 @@
             </nav>   
             <?php
             $smtp = new SMTP($db);
-            if($smtp->getCount() > 0){ 
+            if($smtp->getCount() > 0){ //SMTP settings found, use email to confirm address
+				$email = new Email("name", "wizkid916@yahoo.com", "subject", "my body");
                 echo'    
                 <section class="content">
                     <form class="validate-engine">

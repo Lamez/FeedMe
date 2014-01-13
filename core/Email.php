@@ -1,86 +1,65 @@
 <?php
-	require("pear/Mail.php");
-	class Email extends Mail{
-		var $name, $email, $subject, $body;
-		var $f_name, $f_email;
-		var $auth, $username, $password;
-		var $server, $port;
-		var $error = NULL, $sent;
-		function __construct($name, $email, $subject, $body, $from = NULL, $femail = NULL){
-			$this->name = $name;
-			$this->email = $email;
-			$this->subject = $subject;
-			$this->body = $body;
-			$this->callSettings();
-			if(!is_null($from))
-				$this->f_name = $from;
-			if(!is_null($femail))
-				$this->f_email = $femail;
-			$this->send();
+	class Email{
+		private $db, $email, $from, $to, $settings, $error, $sent;
+		function __construct(){
+			$email = NULL;
+			$from = NULL;
+			$settings = NULL;
+			$to = NULL;
+			$sent = false;
+			$error = "";
 		}
-		function send(){
-			$from = $this->f_name." <".$this->f_email.">";
-			$to = $this->name." <".$this->email.">";
+		public function email($subject, $body){
+			$email["subject"] = $subject;
+			$email["body"] = $body;
+			$this->email = $email;
+		}
+		public function to($name, $email){
+			$to["name"] = $name;
+			$to["email"] = $email;
+			$this->to = $to;
+		}
+		public function from($name, $email){
+			$from["name"] = $name;
+			$from["email"] = $email;
+			$this->from = $from;
+		}
+		public function settings($server, $port, $protocol, $auth_required, $username = NULL, $password = NULL){
+			$settings["server"] = $server;
+			$settings["port"] = $port;
+			$settings["protocol"] = $protocol;
+			$settings["auth_required"] = $auth_required;
+			$settings["username"] = $username;
+			$settings["password"] = $password;
+			$this->settings = $settings;
+		}
+		public function sendEmail(){
+			require("pear/Mail.php");
+			$mail = new Mail();
+			$from = $this->from["name"]." <".$this->from["email"].">";
+			$to = $this->to["name"]." <".$this->to["email"].">";
 			$headers = array (	'From' => $from,
 								'To' => $to,
 								'Reply-To' => $from,
-								'Subject' => $this->subject);	  
-			$smtp = Mail::factory('smtp',
-			array (	'host' => $this->server,
-					'port' => $this->port,
-					'auth' => $this->auth,
-					'username' => $this->username,
-					'password' => $this->password));
-			$mail = $smtp->send($to, $headers, $this->body);
+								'Subject' => $this->email["subject"]);	  
+			$smtp = $mail->factory('smtp',
+			array (	'host' => $this->settings["protocol"]."://".$this->settings["server"],
+					'port' => $this->settings["port"],
+					'auth' => $this->settings["auth"],
+					'username' => $this->settings["username"],
+					'password' => $this->settings["password"]));
+			$mail = $smtp->send($to, $headers, $this->email["body"]);
 			if(PEAR::isError($mail)){
 				$this->error = $mail->getMessage();
 				$this->sent = false;
 			}else
-				$this->sent = true;
+				$this->sent = true;		
 		}
-		function error(){
-			echo $this->error;
+		public function error(){
+			return $this->error;
 		}
-		private function callSettings(){
-			$id = $this->getDefault();
-			if($id !=  -1){
-				global $db;
-				$q = $db->select(TBL_SMTP, "*", "id = '$id'");
-				$f = $q->fetchRow();
-				$this->auth = settype($f['auth'], "boolean");
-				if($this->auth){
-					$this->username = $f['username'];
-					$this->password = $f['password'];
-				}
-				$this->server = "";
-				if($f['protocol'] != 'NA')
-					$this->server = $f['protocol']."://";
-				$this->server .= $f['server'];
-				$this->port = $f['port'];
-				$this->f_name = $f['name'];
-				$this->f_email = $f['email'];				
-			}else{
-				$this->error = "Email Settings not Set";
-				$this->sent = false;
-			}
-		}
-		private function getDefault(){
-			global $db;
-			if($db->select(TBL_SMTP, "id", "`default` = '1'")->numRows() > 0){
-				$f = $db->fetchRow();
-				return $f['id'];
-			}else{
-				if($this->countAccounts() > 0){
-					$q = $db->select(TBL_SMTP, "id");
-					$f = $q->fetchRow();
-					return $f['id'];
-				}else
-					return -1;
-			}
-		}
-		private function countAccounts(){
-			global $db;
-			return $db->select(TBL_SMTP, "id")->numRows();			
+		public function sent(){
+			return $this->sent;
 		}
 	};
 ?>

@@ -1,4 +1,5 @@
 <?php
+require_once 'SMTP.php';
 /**
  * PEAR, the PHP Extension and Application Repository
  *

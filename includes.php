@@ -1,5 +1,6 @@
 <?php
 	//includes.php: this file is to pack all the classes and needed 'include' files in one central spot.
+	error_reporting(0);//turn off error reporting. :)
 	if(!isset($path))
 		$path = "";
 	include($path."constants.php");
@@ -10,6 +11,7 @@
 	include($path."core/Database.php");
 	include($path."core/Website.php");
 	include($path."core/SMTP.php");
+	include($path."core/Email.php");
 	
 	//include("core/Auth.php");
 	//include("core/File.php");

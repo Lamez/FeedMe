@@ -17,9 +17,7 @@
 // +----------------------------------------------------------------------+
 //
 // $Id: Mail.php,v 1.20 2007/10/06 17:00:00 chagenbu Exp $
-
 require_once 'PEAR.php';
-
 /**
  * PEAR's Mail:: interface. Defines the interface for implementing
  * mailers under the PEAR hierarchy, and provides supporting functions
