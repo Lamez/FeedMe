@@ -1,14 +1,24 @@
 <?php
 	$page = new Page("My Websites", $person);
 	$page->requireLogin();
-	$page->showHeader();
 	$website = new Website($db);
 	if($page->getQuery("addWebsite") == 1){
-		$name = "";
-		$address = "";
-		$folder = "";
-		//add entry checking and update DB
-		//if insert == 1
+		if($page->getQuery("insert") == 1 && $session->get("displayed_wb") == 1){
+			$session->add("name", $_POST["name"]);
+			$session->add("address", $_POST["address"]);
+			$session->add("folder", $_POST["folder"]);
+			//field checking and insering into the DB.	
+			
+			$session->remove("displayed_wb");
+			$page->removeQuery("insert");
+			$page->redirect();
+			exit;
+		}
+		$name = $session->get("name");
+		$address = $session->get("address");
+		$folder = $session->get("folder");
+		
+		$page->showHeader();
 ?>
     <div class="grid_12">
         <div class="widget minimizable">
@@ -20,7 +30,8 @@
                 <h2>Add A Website</h2>
             </div>
         </header>
-        <div class="content">        	
+        <div class="content">
+        <?php $session->add("displayed_wb", 1); ?>  	
             <form action="<?php echo $page->makeLink("insert", 1, array("dark", "page", "addWebsite")); ?>" class="validate" method="post">
             	<fieldset class="set">
             		<div class="field">
@@ -28,21 +39,20 @@
                     	<label>Website Name: </label>
                         <div class="entry">
                         	<p>Enter the name of the website, this is for your reference!</p>
-                       		<input type="text" class="required" name="name" />
+                       		<input type="text" class="required" name="name" value="<?php echo $name; ?>"/>
                   		</div>
                     </div>
             		<div class="field">
                     	<label>Address: </label>
                         <div class="entry">
-                        	<p>Do not add the http:// or https://, I will take care of it!</p>
-                       		<input type="text" class="required" name="address" />
+                       		<input type="text" class="required" name="address" value="<?php echo $address; ?>"/>
                   		</div>
                     </div>
             		<div class="field">
                     	<label>Folder: </label>
                         <div class="entry">
                         	<p>Enter the folder you want <?php APP_NAME ?> to parse, leave blank for the root folder!</p>
-                       		<input type="text" name="folder" />
+                       		<input type="text" name="folder" value="<?php echo $folder; ?>" />
                   		</div>
                     </div>
                 </fieldset>
@@ -53,8 +63,9 @@
             </div>
         </div>
     </div>
-<?php
+<?php		
 	}else{
+		$page->showHeader();
 ?>
 <div class="grid_12">
 	<div class="widget minimizable">
