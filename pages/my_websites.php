@@ -5,65 +5,84 @@
 	if($page->getQuery("addWebsite") == 1){
 		if($page->getQuery("insert") == 1 && $session->get("displayed_wb") == 1){
 			$session->add("name", $_POST["name"]);
+			if(!$website->hasProtocol($_POST["address"])){
+				$_POST["address"] = "http://".$_POST["address"]; 
+			}
 			$session->add("address", $_POST["address"]);
 			$session->add("folder", $_POST["folder"]);
-			//field checking and insering into the DB.	
-			
 			$session->remove("displayed_wb");
 			$page->removeQuery("insert");
-			$page->redirect();
-			exit;
-		}
-		$name = $session->get("name");
-		$address = $session->get("address");
-		$folder = $session->get("folder");
-		
-		$page->showHeader();
+			//field checking and insering into the DB.	
+			if(!$website->validAddress($_POST["address"])){
+				$page->addQuery("error", 1);
+				$page->redirect();	
+				exit;
+			}else{
+				if(empty($_POST["folder"])){
+					$_POST["folder"] = "/";
+				}
+				$website->add($_POST["name"], $_POST["address"], $_POST["folder"]);
+				$page->redirect();
+				exit;
+			}
+		}else{
+			$name = $session->get("name");
+			$address = $session->get("address");
+			$folder = $session->get("folder");
+			
+			$page->showHeader();
+			$page->removeQuery("error");
 ?>
-    <div class="grid_12">
-        <div class="widget minimizable">
-        <header>
-            <div class="icon">
-                <span class="icon" data-icon="card"></span>
-            </div>
-            <div class="title">
-                <h2>Add A Website</h2>
-            </div>
-        </header>
-        <div class="content">
-        <?php $session->add("displayed_wb", 1); ?>  	
-            <form action="<?php echo $page->makeLink("insert", 1, array("dark", "page", "addWebsite")); ?>" class="validate" method="post">
-            	<fieldset class="set">
-            		<div class="field">
-                 
-                    	<label>Website Name: </label>
-                        <div class="entry">
-                        	<p>Enter the name of the website, this is for your reference!</p>
-                       		<input type="text" class="required" name="name" value="<?php echo $name; ?>"/>
-                  		</div>
-                    </div>
-            		<div class="field">
-                    	<label>Address: </label>
-                        <div class="entry">
-                       		<input type="text" class="required" name="address" value="<?php echo $address; ?>"/>
-                  		</div>
-                    </div>
-            		<div class="field">
-                    	<label>Folder: </label>
-                        <div class="entry">
-                        	<p>Enter the folder you want <?php APP_NAME ?> to parse, leave blank for the root folder!</p>
-                       		<input type="text" name="folder" value="<?php echo $folder; ?>" />
-                  		</div>
-                    </div>
-                </fieldset>
-                <footer class="pane">
-                    <input type="submit" value="Add" class="fullpane-bt" />
-                </footer>
-            </form>
+        <div class="grid_12">
+            <div class="widget minimizable">
+            <header>
+                <div class="icon">
+                    <span class="icon" data-icon="card"></span>
+                </div>
+                <div class="title">
+                    <h2>Add A Website</h2>
+                </div>
+            </header>
+            <div class="content">
+            <?php $session->add("displayed_wb", 1); ?>  	
+                <form action="<?php echo $page->makeLink("insert", 1, array("dark", "page", "addWebsite")); ?>" class="validate" method="post">
+                    <fieldset class="set">
+                        <div class="field">
+                     
+                            <label>Website Name: </label>
+                            <div class="entry">
+                                <p>Enter the name of the website, this is for your reference!</p>
+                                <input type="text" class="required" name="name" value="<?php echo $name; ?>"/>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label>Address: </label>
+                            <div class="entry">
+                                <input type="text" class="required" name="address" value="<?php echo $address; ?>"/>
+                                 <?php
+									if($page->getQuery("error") == 1){
+										echo '<div class="error-container"><label for="address" class="error">The address you have entered is not valid.</label></div>';
+									}
+								?>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label>Folder: </label>
+                            <div class="entry">
+                                <p>Enter the folder you want <?php APP_NAME ?> to parse, leave blank for the root folder!</p>
+                                <input type="text" name="folder" value="<?php echo $folder; ?>" />
+                            </div>
+                        </div>
+                    </fieldset>
+                    <footer class="pane">
+                        <input type="submit" value="Add" class="fullpane-bt" />
+                    </footer>
+                </form>
+                </div>
             </div>
         </div>
-    </div>
-<?php		
+<?php	
+		}//end else to if insert == 1
 	}else{
 		$page->showHeader();
 ?>

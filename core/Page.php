@@ -176,7 +176,7 @@
 		}
 		public function removeQuery($get){
 			parse_str($this->getQueryString(), $out);
-			if(array_key_exists($get, $out)){
+			if(array_key_exists($get, $out)){ 
 				unset($out[$get]);
 				$this->setQuery(http_build_query($out));
 			}
@@ -255,7 +255,7 @@
 		
 		private function removeCrumb($i){
 			unset($this->crumbs[$i]);
-			$this->curmb_size--;
+			$this->crumb_size--;
 		}
 		public function printCrumb($i){
 			if($i < $this->crumb_count()) 
@@ -264,9 +264,9 @@
 				echo "";
 		}
 		public function random(){
-			$this->addCrumb("Page A");
-			$this->addCrumb("Page B");
-			$this->addCrumb("Page C");
+			$this->addCrumb("Page A", 0);
+			$this->addCrumb("Page B", 1);
+			$this->addCrumb("Page C", 2);
 		}
 		private function crumb_count(){
 			return $this->crumb_size;
