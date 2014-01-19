@@ -26,7 +26,7 @@
 			}else{ //go back to login page. and show error..
 				$value = $session->get("login-page-trys") + 1;
 				$session->change("login-page-trys", $value);
-				$page->addQuery("error", 1);
+				$page->addQuery("login-error", 1);
 				$page->removeQuery("validate");
 				$page->redirect();
 			}
@@ -48,7 +48,7 @@
             </nav>        
             <section class="content">
                 <?php 
-                    if($page->queryEqual("error", "1"))
+                    if($page->queryEqual("login-error", "1"))
                         echo $page->newAlert("", "Invalid Email, Password combination", "red");	
 					else if($page->queryEqual("pw_reset", 1))
 						echo $page->newAlert("", "Your password has been reset.", "green");
