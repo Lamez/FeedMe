@@ -147,7 +147,7 @@
 			exit;
 		}
 	}else{ //DEFAULT PAGE..SHOW WEBSITES.
-		function printModal($id, $name, $address, $folder, $online, $button, $session){
+		function printModal($id, $name, $address, $folder, $online, $button1, $button2, $session){
 			if($online)
 				$online = '<font color="#00CC33">Yes</font>';
 			else
@@ -178,7 +178,7 @@
 									<p>Online: '.$online.'</p>
 								</div>
                                 <footer class="pane">
-                                    <a href="#" class="close bt red">Close</a>'.$button.'
+                                    <a href="#" class="close bt red">Close</a>'.$button1.$button2.'
                                 </footer>
                             </div>
                         </div>
@@ -218,14 +218,14 @@
 								  	<td>'.$data["address"].'</td>
 								  	<td>'.$data["folder"].'</td>
 							 	  </tr>';
-								  $page->changeQuery("deleteWebsite", $data["id"]);
 								  printModal(
 									  $data["id"], 
 									  $data["name"], 
 									  $data["address"], 
 									  $data["folder"], 
 									  $session->get("website-online-".$data["id"]), 
-									  '<a href=?'.$page->getQueryString().' class="bt red lg">Delete This Website?</a>',
+									  '<a href="?'.$page->getQueryString().'&editWebsite='.$data["id"].'" class="bt red lg">Edit This Website</a>',
+									  '<a href="?'.$page->getQueryString().'&deleteWebsite='.$data["id"].'" class="bt red lg">Delete This Website?</a>',
 									  $session
 								  );//I could have just passed the data array..., silly goose.
 						}
