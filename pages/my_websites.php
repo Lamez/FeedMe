@@ -4,10 +4,8 @@
 	$website = new Website($db);
 	if($page->getQuery("addWebsite") == 1){ //ADD A WEBSITE
 		if($page->getQuery("insert") == 1 && $session->get("displayed_wb") == 1){
-			$session->add("debug", $_POST);
 			$session->add("name", $_POST["name"]);
-			$_POST["address"] = strtolower($_POST["address"]);
-			$_POST["address"] = stripslashes($_POST["address"]);
+			$_POST["address"] = $website->formatAddress($_POST["address"]);
 			$session->add("address", $_POST["address"]);
 			$session->add("folder", $_POST["folder"]);
 			$session->remove("displayed_wb");
@@ -18,15 +16,12 @@
 				$page->redirect();	
 				exit;
 			}else{
-				if(empty($_POST["folder"])){
-					$_POST["folder"] = "/";
-				}else{
-					$_POST["folder"] = stripslashes($_POST["folder"]);
-					$_POST["folder"] = "/".$_POST["folder"];
-				}
+				$_POST["folder"] = $website->formatFolder($_POST["folder"]);
 				if(!$website->hasProtocol($_POST["address"])){
 					$_POST["address"] = "http://".$_POST["address"]; 
 				}
+				if(empty($_POST["name"]))
+					$_POST["name"] = "My Website";
 				$website->add($_POST["name"], $_POST["address"], $_POST["folder"]);
 				$session->remove("address");
 				$session->remove("name");
@@ -96,11 +91,90 @@
 	}else if(is_numeric($page->getQuery("editWebsite"))){ //EDIT WEBSITE!
 		$id = $page->getQuery("editWebsite");
 		if($website->IdExists($id) && !is_null($session->get("website-info-".$id))){
+			$data = $session->get("website-info-".$id);
 			if($page->getQuery("update", 1)){
-				//do stuff..
+				$_POST["address"] = $website->formatAddress($_POST["address"]);
+				$_POST["folder"] = $website->formatFolder($_POST["folder"]);
+				if(empty($_POST["name"]))
+					$_POST["name"] = "My Website";
+				if(!$website->validAddress($_POST["address"])){
+					$page->addQuery("error", 1);
+					$session->add("ed-web-name", $_POST["name"]);
+					$session->add("ed-web-address", $_POST["address"]);
+					$session->add("ed-web-folder", $_POST["folder"]);
+				}else{		
+					$website->update($id, $_POST["name"], $_POST["address"], $_POST["folder"]);
+					$folder = $website->formatFolder($_POST["folder"]);
+					$session->remove("website-info-".$id);
+					$session->remove("website-online-".$id);
+					$session->remove("ed-web-name");
+					$session->remove("ed-web-address");
+					$session->remove("ed-web-folder");
+					$page->removeQuery("editWebsite");
+				}
+				$page->removeQuery("update");
+				$page->redirect();
+				exit;
 			}else{
+				$name = $data["name"];
+				$folder = $data["folder"];
+				$address = $data["address"];
+				if(!is_null($session->get("ed-web-name")))
+					$name = $session->get("ed-web-name");
+				if(!is_null($session->get("ed-web-folder")))
+					$folder = $session->get("ed-web-folder");
+				if(!is_null($session->get("ed-web-address")))
+					$address = $session->get("ed-web-address");
 				$page->showHeader();
-				echo "Show form here to edit that stuffs....";
+				?>
+                	<div class="grid_12">
+                        <div class="widget minimizable">
+                            <header>
+                                <div class="icon">
+                                    <span class="icon" data-icon="card"></span>
+                                </div>
+                                <div class="title">
+                                    <h2>Editing <?php echo $name; ?></h2>
+                                </div>
+                            </header>
+                            <div class="content">	
+                                    <form action="<?php echo $page->makeLink("update", 1, array("dark", "page", "update", "editWebsite")); ?>" class="validate" method="post">
+                                        <fieldset class="set">
+                                            <div class="field">
+                                         
+                                                <label>Website Name: </label>
+                                                <div class="entry">
+                                                    <p>Enter the name of the website, this is for your reference!</p>
+                                                    <input type="text" class="required" name="name" value="<?php echo $name; ?>"/>
+                                                </div>
+                                            </div>
+                                            <div class="field">
+                                                <label>Address: </label>
+                                                <div class="entry">
+                                                    <input type="text" class="required" name="address" value="<?php echo $address; ?>"/>
+                                                     <?php
+                                                        if($page->getQuery("error") == 1){
+                                                            echo '<div class="error-container"><label for="address" class="error">The address you have entered is not valid.</label></div>';
+                                                        }
+                                                    ?>
+                                                </div>
+                                            </div>
+                                            <div class="field">
+                                                <label>Folder: </label>
+                                                <div class="entry">
+                                                    <p>Enter the folder you want to parse, leave blank for the root folder!</p>
+                                                    <input type="text" name="folder" value="<?php echo $folder; ?>" />
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                        <footer class="pane">
+                                            <input type="submit" value="Edit" class="fullpane-bt" />
+                                        </footer>
+                                    </form>
+                                    </div>
+                                </div>
+                            </div>
+                <?php
 			}
 		}else{
 			$page->removeQuery("editWebsite");

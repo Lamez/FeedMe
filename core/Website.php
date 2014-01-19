@@ -7,6 +7,9 @@
 		public function add($name, $address, $folder){
 			$this->db->execute("INSERT INTO ".TBL_WEBSITES." (name, address, folder) VALUES('".$name."', '".$address."', '".$folder."')");
 		}
+		public function update($id, $name, $address, $folder){
+			$this->db->execute("UPDATE ".TBL_WEBSITES." SET name = '".$name."', address = '".$address."', folder = '".$folder."' WHERE id = '".$id."'");
+		}
 		public function delete($id){
 			$this->db->execute("DELETE FROM ".TBL_WEBSITES." WHERE id = '".$id."'");
 		}
@@ -18,6 +21,25 @@
 		public function IdExists($id){
 			$this->db->execute("SELECT id FROM ".TBL_WEBSITES." WHERE id = '".$id."'");
 			return $this->db->numRows() > 0;
+		}
+		public function formatFolder($folder){
+			if(empty($folder)){
+				$folder = "/";
+			}else{
+				$folder = str_replace(" " , "_", $folder);
+				$folder = strtolower($folder);
+				$folder = str_replace("/", "", $folder);
+				$folder = str_replace("\\", "", $folder);
+			}
+			if($folder != "/")
+				return "/".$folder;
+			else
+				return $folder;
+		}
+		public function formatAddress($address){
+			$address = strtolower($address);
+			//$address = str_replace("/", "" , $address);
+			return str_replace("\\", "", $address);
 		}
 		/*public function isUp($address){
 			$ch = curl_init($address);
