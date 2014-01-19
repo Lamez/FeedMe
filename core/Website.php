@@ -22,9 +22,9 @@
 			return 200 == $retcode; //true if online or "up"
 		}
 		public function validAddress($address){
-			//$ip = preg_match("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$", $address);
-			//$hostname = preg_match("^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$", $address);
-			return preg_match("#^(https?://)?[^/.]+(\.[^/.])+/?$#", $address);
+			return (preg_match("/^([a-z\d](-*[a-z\d])*)(\.([a-z\d](-*[a-z\d])*))*$/i", $address) //valid chars check
+            && preg_match("/^.{1,253}$/", $address) //overall length check
+            && preg_match("/^[^\.]{1,63}(\.[^\.]{1,63})*$/", $address));
 		}
 		public function hasProtocol($input){
 			$address = parse_url($input);
