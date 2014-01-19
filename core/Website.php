@@ -38,6 +38,9 @@
 		}
 		public function formatAddress($address){
 			$address = strtolower($address);
+			if(!$this->hasProtocol($address)){
+					$address = "http://".$address; 
+				}
 			//$address = str_replace("/", "" , $address);
 			return str_replace("\\", "", $address);
 		}

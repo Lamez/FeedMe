@@ -17,9 +17,6 @@
 				exit;
 			}else{
 				$_POST["folder"] = $website->formatFolder($_POST["folder"]);
-				if(!$website->hasProtocol($_POST["address"])){
-					$_POST["address"] = "http://".$_POST["address"]; 
-				}
 				if(empty($_POST["name"]))
 					$_POST["name"] = "My Website";
 				$website->add($_POST["name"], $_POST["address"], $_POST["folder"]);
@@ -266,7 +263,7 @@
 									<p>Online: '.$online.'</p>
 								</div>
                                 <footer class="pane">
-                                    <a href="#" class="close bt red">Close</a>'.$button1.$button2.'
+                                    <a href="'.$address.$folder.'" class="bt red" target="_blank">Open This Website</a>'.$button1.$button2.'<a href="#" class="close bt red">Close</a>
                                 </footer>
                             </div>
                         </div>
