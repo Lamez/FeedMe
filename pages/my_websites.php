@@ -93,6 +93,20 @@
         </div>
 <?php	
 		}//end else to if insert == 1
+	}else if(is_numeric($page->getQuery("editWebsite"))){ //EDIT WEBSITE!
+		$id = $page->getQuery("editWebsite");
+		if($website->IdExists($id) && !is_null($session->get("website-info-".$id))){
+			if($page->getQuery("update", 1)){
+				//do stuff..
+			}else{
+				$page->showHeader();
+				echo "Show form here to edit that stuffs....";
+			}
+		}else{
+			$page->removeQuery("editWebsite");
+			$page->redirect();
+			exit;
+		}
 	}else if(is_numeric($page->getQuery("deleteWebsite"))){ //DELETE WEBSITE
 		$id = $page->getQuery("deleteWebsite");
 		if($website->IdExists($id)){
