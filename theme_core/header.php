@@ -104,13 +104,14 @@
                     	<ul>
 							<?php 
                                 echo $this->newMenuItem("Home", "home", "cloud");
-								echo $this->newMenuItem("My Websites", "my_websites", "list-with-icons");
+								echo $this->newMenuItem("My Websites", "my_websites", "rss-2");
 								//echo $this->newMenuItem("Template Home", "http://themeforest.net/item/esplendido-premium-admin-template/2245222?sso?WT.ac=search_item&WT.seg_1=search_item&WT.z_author=lucaswxp", "cloud", true);
                             	echo $this->newSubMenu("People Managment", 
 								array("My Profile", "Manage People",), 
 								array("edit_person", "manage_people"), 
 								"user");
-								echo $this->newMenuItem("SMTP Settings", "smtp_settings", "database");
+								echo $this->newMenuItem("Email Settings", "email_settings", "settings");
+								
 							?>
                     	</ul>
                     <nav>

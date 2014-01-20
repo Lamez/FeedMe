@@ -185,6 +185,7 @@
 				if(!is_null($page->getQuery("ans"))){
 					//handle the request
 					$session->remove("website-info-".$id); //no longer needed..
+					$session->remove("website-online-".$id);
 					$page->removeQuery("deleteWebsite");
 					$page->removeQuery("ans");
 					if($page->getQuery("ans") == 2){//yes delete :(
