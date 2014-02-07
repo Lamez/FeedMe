@@ -19,6 +19,6 @@
 	
 	/* Database Table Information */
 	define("TBL_PEOPLE", "people");
-	
+	define("TBL_WEBSITES", "websites");
+	define("TBL_SMTP", "smtp");
 	/* Salt */
-?>
